@@ -5,15 +5,15 @@ import time
 
 website = "https://shop.exclucitylife.com"
 
-email = 'jade.jch@gmail.com'
-firstname = 'Jakrarat'
-lastname = 'Chunnananda'
-address = '2406-788 Richards Street'
-city = 'Vancouver'
-country = 'Canada'
-province = 'British Columbia'
-postal = 'V6B3A4'
-phone = '7789854625'
+email = ''
+firstname = ''
+lastname = ''
+address = ''
+city = ''
+country = ''
+province = ''
+postal = ''
+phone = ''
 
 cardexpmonth = ''
 cardnumber = ''
