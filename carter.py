@@ -15,6 +15,12 @@ province = 'British Columbia'
 postal = 'V6B3A4'
 phone = '7789854625'
 
+cardexpmonth = ''
+cardnumber = ''
+cardexpyear = ''
+cvv = ''
+
+
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
 }
@@ -71,12 +77,40 @@ def checkout(atc_url, captchatoken):
         'utf8': ''
     }
 
-    r2 = session.post(website+form['action'], data=payload1, headers=headers)
+    # Submitting Shipping Method
+    r2 = session.post(website+form1['action'], data=payload1, headers=headers)
     print(r2.status_code)
-    print("Submitted shipping method: " + str(time.time()-t0) +"s")
+    print("Submitted shipping method: " + str(time.time()-t0) + 's')
 
+    soup2 = BeautifulSoup(r2.text, 'html.parser')
+    form2 = soup2.find('form', {'class': 'edit_checkout'})
 
-    ##form1 = soup.find('form', {'class': 'edit_checkout'})
+    payload2 = {
+        'utf8': '✓',
+        'authenticity_token': form2.find('input', {'name': 'authenticity_token'})['value'],
+        'previous_step': 'payment_method',
+        'step': '',
+        's': '',
+        'c': form.find('input', {'name': 'c'})['value'],
+        'd': form.find('input', {'name': 'd'})['value'],
+        'checkout[payment_gateway]': form.find('input', {'name': 'checkout[payment_gateway]'})['value'],
+        'checkout[credit_card][number]': cardnumber,
+        'checkout[credit_card][name]': firstname + ' ' + lastname,
+        'checkout[credit_card][month]': cardexpmonth.strip('0'),
+        'checkout[credit_card][year]': cardexpyear,
+        'expiry': cardexpmonth + ' / ' + cardexpyear[-2:],
+        'checkout[credit_card][verification_value]': cvv,
+        'checkout[different_billing_address]': 'false',
+        'checkout[buyer_accepts_marketing]': '0',
+        'complete': '1',
+        'checkout[client_details][browser_width]': '1280',
+        'checkout[client_details][browser_height]': '728',
+        'checkout[client_details][javascript_enabled]': '1'
+        }
+
+    # Submitting Payment Method
+    #r3 = session.post(website+form2['action'], data=payload2, headers=headers)
+    print("Submitted payment method: " + str(time.time() - t0) + 's')
 
 
 
