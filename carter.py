@@ -21,12 +21,12 @@ headers = {
 
 
 def checkout(atc_url, captchatoken):
+    t0 = time.time()
     session = requests.Session()
     r0 = session.get(atc_url)
     soup = BeautifulSoup(r0.text, 'html.parser')
 
     form = soup.find('form', {'class': 'edit_checkout'})
-    print(form.find('input', {'name': 'authenticity_token'})['value'])
 
     payload = {
         '_method': 'patch',
@@ -50,11 +50,9 @@ def checkout(atc_url, captchatoken):
         'step': 'shipping_method',
         'utf8': '✓'
     }
-    #time.sleep(2)
+
     # Submitting Shipping
-    web = website+form['action']
-    #print(web)
-    r1 = session.post(web, data=payload, headers=headers)
-    print(r1.status_code)
+    r1 = session.post(website+form['action'], data=payload, headers=headers)
+    print("Submitted Shipping - took " + str(time.time()-t0) + 's')
 
 
