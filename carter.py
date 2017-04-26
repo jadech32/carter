@@ -53,6 +53,32 @@ def checkout(atc_url, captchatoken):
 
     # Submitting Shipping
     r1 = session.post(website+form['action'], data=payload, headers=headers)
-    print("Submitted Shipping - took " + str(time.time()-t0) + 's')
+    print("Submitted sipping info " + str(time.time()-t0) + 's')
+
+    soup1 = BeautifulSoup(r1.text, 'html.parser')
+    form1 = soup1.find('form', {'class': 'edit_checkout'})
+
+    payload1 = {
+        '_method': 'patch',
+        'authenticity_token': form1.find('input', {'name': 'authenticity_token'})['value'],
+        'button': '',
+        'checkout[client_details][browser_height]': '728',
+        'checkout[client_details][browser_width]': '1280',
+        'checkout[client_details][javascript_enabled]': '1',
+        'checkout[shipping_rate][id]': 'shopify-Expedited%20Parcels%20W/%20Signature%20&%20Delivery%20confirmation%20(1-2%20business%20days)-0.00',
+        'previous_step': 'shipping_method',
+        'step': 'payment_method',
+        'utf8': ''
+    }
+
+    r2 = session.post(website+form['action'], data=payload1, headers=headers)
+    print(r2.status_code)
+    print("Submitted shipping method: " + str(time.time()-t0) +"s")
+
+
+    ##form1 = soup.find('form', {'class': 'edit_checkout'})
+
+
+
 
 
